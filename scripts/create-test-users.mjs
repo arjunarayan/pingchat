@@ -181,8 +181,10 @@ async function cleanup() {
   }
   rmSync(STATE_FILE, { force: true });
   console.log(
-    "\nDone. Note: messages they posted are still in Firestore — delete them in\n" +
-      "Firestore Database → Data → messages (security rules block client deletes)."
+    "\nDone. (If scripts/bots.mjs was running, stop it with Ctrl+C — the bots\n" +
+      "no longer exist.) Note: messages they posted are still in Firestore —\n" +
+      "delete them in Firestore Database → Data → messages (security rules\n" +
+      "block client deletes)."
   );
 }
 

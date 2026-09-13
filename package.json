@@ -1,0 +1,13 @@
+{
+  "name": "pingchat",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "node scripts/create-test-users.mjs",
+    "bots": "node scripts/bots.mjs"
+  },
+  "dependencies": {
+    "firebase": "^10.12.2"
+  }
+}

@@ -102,6 +102,46 @@ GitHub Pages redeploys automatically within a minute or two of every push.
 
 ---
 
+## 🤖 AI bot accounts (optional)
+
+The dummy test accounts can come alive as AI bots powered by Google's
+Gemini (free tier — no credit card):
+
+1. Create the dummies (if you haven't):
+   ```bash
+   node scripts/create-test-users.mjs
+   ```
+2. Get a free API key at [Google AI Studio](https://aistudio.google.com/apikey)
+   (sign in with the same Google account). Either export it:
+   ```bash
+   export GEMINI_API_KEY=your-key-here
+   ```
+   or save it in `scripts/.env` (git-ignored):
+   ```
+   GEMINI_API_KEY=your-key-here
+   ```
+3. Install dependencies and start the bots:
+   ```bash
+   npm install
+   npm run bots
+   ```
+
+While the script runs, the bots reply to human messages — each has its own
+personality (see `PERSONAS` in `scripts/bots.mjs`), they read the recent chat
+for context, show typing indicators, answer when @mentioned by name, and
+never reply to each other. Press `Ctrl+C` to silence them; nothing runs in
+the cloud, so nothing costs money while the script is off.
+
+Remove the bot accounts entirely with:
+
+```bash
+node scripts/create-test-users.mjs cleanup
+```
+
+(or delete them in Firebase Console → Authentication → Users).
+
+---
+
 ## How it works
 
 - `index.html` — sign-in screen, first-time display-name screen, chat UI
