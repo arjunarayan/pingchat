@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PingChat</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>" />
+</head>
+<body>
+  <!-- Shown if the Firebase config hasn't been pasted in yet -->
+  <div id="config-warning" class="overlay" hidden>
+    <div class="card">
+      <h1>⚙️ Setup needed</h1>
+      <p>
+        This app needs your Firebase project config. Open <code>app.js</code> and
+        replace the <code>firebaseConfig</code> placeholder with the config from your
+        Firebase Console, then reload this page.
+      </p>
+      <p>See <code>README.md</code> for step-by-step instructions.</p>
+    </div>
+  </div>
+
+  <!-- Name entry screen -->
+  <div id="name-screen" class="overlay" hidden>
+    <form id="name-form" class="card">
+      <h1>💬 PingChat</h1>
+      <p>Pick a display name to join the chat.</p>
+      <input
+        id="name-input"
+        type="text"
+        maxlength="40"
+        placeholder="Your name"
+        autocomplete="off"
+        required
+      />
+      <button type="submit">Join chat</button>
+    </form>
+  </div>
+
+  <!-- Chat screen -->
+  <div id="chat-screen" hidden>
+    <header class="chat-header">
+      <div class="chat-title">
+        <span class="logo">💬</span>
+        <h1>PingChat</h1>
+      </div>
+      <div class="me">
+        <span id="my-name"></span>
+        <button id="change-name" title="Change name">✎</button>
+      </div>
+    </header>
+
+    <div id="error-banner" hidden></div>
+
+    <main id="messages" aria-live="polite"></main>
+
+    <div id="typing-indicator" hidden></div>
+
+    <form id="composer">
+      <input
+        id="message-input"
+        type="text"
+        maxlength="1000"
+        placeholder="Type a message…"
+        autocomplete="off"
+        required
+      />
+      <button type="submit" id="send-btn" aria-label="Send">➤</button>
+    </form>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
