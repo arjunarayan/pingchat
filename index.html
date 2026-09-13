@@ -8,24 +8,32 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>" />
 </head>
 <body>
-  <!-- Shown if the Firebase config hasn't been pasted in yet -->
-  <div id="config-warning" class="overlay" hidden>
-    <div class="card">
-      <h1>⚙️ Setup needed</h1>
+  <!-- Sign-in screen -->
+  <div id="auth-screen" class="overlay" hidden>
+    <form id="auth-form" class="card">
+      <h1>💬 PingChat</h1>
       <p>
-        This app needs your Firebase project config. Open <code>app.js</code> and
-        replace the <code>firebaseConfig</code> placeholder with the config from your
-        Firebase Console, then reload this page.
+        Enter your email and we'll send you a sign-in link. No password
+        needed — and you'll stay signed in on every device.
       </p>
-      <p>See <code>README.md</code> for step-by-step instructions.</p>
-    </div>
+      <input
+        id="email-input"
+        type="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      />
+      <button type="submit" id="auth-submit">Email me a sign-in link</button>
+      <p id="auth-status" class="notice" hidden></p>
+      <p id="auth-error" class="error-text" hidden></p>
+    </form>
   </div>
 
-  <!-- Name entry screen -->
+  <!-- Display-name screen (shown once, on first sign-in) -->
   <div id="name-screen" class="overlay" hidden>
     <form id="name-form" class="card">
-      <h1>💬 PingChat</h1>
-      <p>Pick a display name to join the chat.</p>
+      <h1>Pick a display name</h1>
+      <p>This is the name others will see next to your messages.</p>
       <input
         id="name-input"
         type="text"
@@ -47,7 +55,8 @@
       </div>
       <div class="me">
         <span id="my-name"></span>
-        <button id="change-name" title="Change name">✎</button>
+        <button id="change-name" class="ghost-btn" title="Change display name">✎</button>
+        <button id="sign-out" class="ghost-btn">Sign out</button>
       </div>
     </header>
 

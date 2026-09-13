@@ -150,18 +150,34 @@ button:hover {
   font-size: 0.9rem;
 }
 
-#change-name {
+.ghost-btn {
   background: transparent;
   border: 1px solid #2a3047;
   border-radius: 8px;
   padding: 0.25rem 0.55rem;
   font-size: 0.85rem;
+  font-weight: 500;
   color: var(--text-dim);
 }
 
-#change-name:hover {
+.ghost-btn:hover {
   background: #20243a;
   color: var(--text);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.card .notice {
+  color: #7ee2a8;
+  font-size: 0.9rem;
+}
+
+.card .error-text {
+  color: var(--danger);
+  font-size: 0.9rem;
 }
 
 #error-banner {

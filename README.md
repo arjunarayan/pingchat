@@ -1,8 +1,9 @@
 # 💬 PingChat
 
-A tiny real-time texting app that runs in the browser. Messages are stored in
-**Firebase Firestore** and delivered instantly to everyone who has the page
-open — no server code required.
+A tiny real-time texting app that runs in the browser. People sign in with
+**just their email** — a passwordless sign-in link, no passwords or sign-up
+forms — and their identity follows them across devices. Messages live in
+**Cloud Firestore** and are delivered instantly to everyone signed in.
 
 **Live URL: https://arjunarayan.github.io/pingchat/**
 (hosted free on GitHub Pages from the
@@ -10,31 +11,35 @@ open — no server code required.
 
 ---
 
-## 1. Create a Firebase project (free)
+## Firebase setup (reference — already done for this deployment)
+
+### 1. Create a Firebase project (free)
 
 1. Go to the [Firebase Console](https://console.firebase.google.com/) and sign
    in with a Google account.
-2. Click **Add project** → give it a name (e.g. `pingchat`) → you can disable
-   Google Analytics → **Create project**.
+2. Click **Add project** → give it a name → you can disable Google Analytics →
+   **Create project**.
 
-## 2. Create the Firestore database
+### 2. Create the Firestore database
 
-1. In the left sidebar, go to **Build → Firestore Database**.
-2. Click **Create database**.
-3. Pick a location close to you, then choose **Start in production mode**
-   (we'll add rules in the next step).
+1. **Build → Firestore Database** → **Create database**.
+2. Pick a location, then **Start in production mode**.
 
-## 3. Set the security rules
+### 3. Security rules
 
-In **Firestore Database → Rules**, paste this and click **Publish**:
+In **Firestore Database → Rules**, paste this and click **Publish**.
+Only signed-in users can read or post, and nobody can edit, delete, or
+impersonate another user's messages:
 
 ```
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /messages/{message} {
-      allow read: if true;
-      allow create: if request.resource.data.keys().hasOnly(['uid', 'name', 'text', 'createdAt'])
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['uid', 'name', 'text', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
         && request.resource.data.text is string
         && request.resource.data.text.size() > 0
         && request.resource.data.text.size() <= 1000
@@ -43,54 +48,49 @@ service cloud.firestore {
       allow update, delete: if false;
     }
     match /typing/{uid} {
-      allow read: if true;
-      allow create, update: if request.resource.data.keys().hasOnly(['name', 'updatedAt'])
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null
+        && uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['name', 'updatedAt'])
         && request.resource.data.name is string
         && request.resource.data.name.size() <= 40;
-      allow delete: if true;
+      allow delete: if request.auth != null && uid == request.auth.uid;
     }
   }
 }
 ```
 
-This lets anyone read messages and post new ones (up to 1000 chars), but
-nobody can edit or delete messages. For a private app you'd add
-[Firebase Authentication](https://firebase.google.com/docs/auth) instead.
+### 4. Enable email-link sign-in
 
-## 4. Get your web app config
+1. **Build → Authentication** → **Get started**.
+2. **Sign-in method** tab → **Email/Password** → enable
+   **Email link (passwordless sign-in)** → **Save**.
+3. **Authentication → Settings → Authorized domains** → **Add domain** →
+   `arjunarayan.github.io` (so the sign-in links can return to the live site).
 
-1. In the Firebase Console, click the **gear icon → Project settings**.
-2. Scroll to **Your apps** and click the **`</>`** (Web) icon.
-3. Register the app (any nickname), skip Firebase Hosting for now.
-4. Copy the `firebaseConfig` object it shows you.
+### 5. Web app config
 
-## 5. Paste the config into the app
+**Project settings → Your apps → `</>`** → register a web app and copy the
+`firebaseConfig` object into `app.js`. (Already done for this deployment.)
 
-Open **`app.js`** and replace the placeholder values in `firebaseConfig` with
-the ones you just copied. Save the file.
+### 6. Run locally
 
-## 6. Run it
-
-Browsers block JavaScript modules on `file://` pages, so serve the folder over
-HTTP. From this directory:
+Browsers block JavaScript modules on `file://` pages, so serve the folder:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then open <http://localhost:8000> in your browser.
+Then open <http://localhost:8000>. (`localhost` is an authorized domain by
+default, so sign-in works locally too.)
 
-## 7. Share it with other people
+### 7. Share it / update it
 
-The app is already deployed to **GitHub Pages** (free):
+The app is deployed to **GitHub Pages** (free):
 
 👉 **https://arjunarayan.github.io/pingchat/**
 
-Anyone with that URL can open it, pick a name, and chat in real time. 🎉
-
-### Updating the live site
-
-Edit any files, then:
+To update the live site, edit files, then:
 
 ```bash
 git add -A
@@ -104,11 +104,16 @@ GitHub Pages redeploys automatically within a minute or two of every push.
 
 ## How it works
 
-- `index.html` — name-entry screen + chat UI
+- `index.html` — sign-in screen, first-time display-name screen, chat UI
 - `style.css` — dark chat styling
-- `app.js` — connects to Firestore, sends messages with `addDoc`, and listens
-  for new ones in real time with `onSnapshot` (no polling, no refresh needed).
-  Typing indicators work the same way: each client throttles writes to a
-  `typing` collection, and everyone else sees "… is typing" for a few seconds.
+- `app.js` — Firebase Authentication (passwordless email links) + Firestore:
+  - `sendSignInLinkToEmail` / `signInWithEmailLink` handle passwordless auth;
+    `onAuthStateChanged` keeps the user signed in across visits and devices.
+  - The display name is stored on the Firebase Auth profile
+    (`updateProfile`), so it syncs to every device.
+  - Messages and typing indicators sync in real time with `onSnapshot`.
 
-Messages appear for everyone within a fraction of a second.
+Sign-in emails are sent by Firebase from
+`noreply@pingchat-c5cd7.firebaseapp.com`. Email addresses are stored in
+Firebase Authentication (visible only to you, in the console); the database
+itself only stores display names and message text.
