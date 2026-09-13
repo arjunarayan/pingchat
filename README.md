@@ -102,35 +102,33 @@ GitHub Pages redeploys automatically within a minute or two of every push.
 
 ---
 
-## 🤖 AI bot accounts (optional)
+## 🤖 Bot accounts (optional)
 
-The dummy test accounts can come alive as AI bots powered by Google's
-Gemini (free tier — no credit card):
+The dummy test accounts can come alive as chat bots — no API key needed:
 
-1. Create the dummies (if you haven't):
-   ```bash
-   node scripts/create-test-users.mjs
-   ```
-2. Get a free API key at [Google AI Studio](https://aistudio.google.com/apikey)
-   (sign in with the same Google account). Either export it:
-   ```bash
-   export GEMINI_API_KEY=your-key-here
-   ```
-   or save it in `scripts/.env` (git-ignored):
-   ```
-   GEMINI_API_KEY=your-key-here
-   ```
-3. Install dependencies and start the bots:
-   ```bash
-   npm install
-   npm run bots
-   ```
+```bash
+npm install
+npm run bots
+```
 
-While the script runs, the bots reply to human messages — each has its own
-personality (see `PERSONAS` in `scripts/bots.mjs`), they read the recent chat
-for context, show typing indicators, answer when @mentioned by name, and
-never reply to each other. Press `Ctrl+C` to silence them; nothing runs in
-the cloud, so nothing costs money while the script is off.
+While the script runs, the bots post in-character one-liners every ~5 seconds
+and reply when humans send messages (they show typing indicators, answer when
+@mentioned by name, and never reply to each other). Useful flags:
+
+```bash
+node scripts/bots.mjs --interval=3000   # chatter every ~3s
+node scripts/bots.mjs --no-chatter      # only reply to humans
+node scripts/bots.mjs --dry-run         # sign in and listen, never post
+```
+
+Press `Ctrl+C` to silence them; nothing runs in the cloud, so nothing costs
+money while the script is off. Personalities and lines live in `PERSONAS` and
+`LINES` in `scripts/bots.mjs` — edit them however you like.
+
+**Optional upgrade — AI-written replies:** set a free
+[Gemini](https://aistudio.google.com/apikey) key (env var `GEMINI_API_KEY`,
+or a `GEMINI_API_KEY=...` line in the git-ignored `scripts/.env`) and replies
+to human messages will be written by AI instead of canned lines.
 
 Remove the bot accounts entirely with:
 
