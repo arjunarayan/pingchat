@@ -4,6 +4,10 @@ A tiny real-time texting app that runs in the browser. Messages are stored in
 **Firebase Firestore** and delivered instantly to everyone who has the page
 open — no server code required.
 
+**Live URL: https://arjunarayan.github.io/pingchat/**
+(hosted free on GitHub Pages from the
+[arjunarayan/pingchat](https://github.com/arjunarayan/pingchat) repo)
+
 ---
 
 ## 1. Create a Firebase project (free)
@@ -78,21 +82,23 @@ Then open <http://localhost:8000> in your browser.
 
 ## 7. Share it with other people
 
-For others to use it, the files need to be hosted somewhere public. Any static
-host works — the easiest options:
+The app is already deployed to **GitHub Pages** (free):
 
-- **Firebase Hosting** (stays in the same console):
-  ```bash
-  npm install -g firebase-tools
-  firebase login
-  firebase init hosting   # choose this folder as the public directory
-  firebase deploy
-  ```
-  You'll get a `https://your-project.web.app` URL to share.
-- **GitHub Pages**, **Netlify**, or **Vercel**: drag-and-drop or push this
-  folder and share the URL.
+👉 **https://arjunarayan.github.io/pingchat/**
 
-Anyone with the URL can open it, pick a name, and chat in real time. 🎉
+Anyone with that URL can open it, pick a name, and chat in real time. 🎉
+
+### Updating the live site
+
+Edit any files, then:
+
+```bash
+git add -A
+git commit -m "describe your change"
+git push
+```
+
+GitHub Pages redeploys automatically within a minute or two of every push.
 
 ---
 
