@@ -16,6 +16,11 @@
   padding: 0;
 }
 
+/* Author display rules below would otherwise override the hidden attribute */
+[hidden] {
+  display: none !important;
+}
+
 html,
 body {
   height: 100%;
