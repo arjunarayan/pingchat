@@ -22,14 +22,13 @@ import {
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 👇 Replace these placeholder values with your own Firebase config.
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID",
+  apiKey: "AIzaSyBnebqg30St8qBF31UEyhHnzdNn7qT6uT4",
+  authDomain: "pingchat-c5cd7.firebaseapp.com",
+  projectId: "pingchat-c5cd7",
+  storageBucket: "pingchat-c5cd7.firebasestorage.app",
+  messagingSenderId: "573832592883",
+  appId: "1:573832592883:web:381a5b34aaecae13802686",
 };
 
 // ---------- DOM refs ----------
